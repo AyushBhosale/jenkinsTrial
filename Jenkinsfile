@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'DefaultMaven'  // Use the exact name you configured in Jenkins
+        maven 'MAVEN'  // Updated to match your Jenkins configuration
     }
     environment {
         GIT_CREDENTIALS_ID = '0c651ffc-10ed-4b2d-a05b-f45c2cd2b267'  // Your credentials ID
@@ -37,7 +37,6 @@ pipeline {
             steps {
                 script {
                     echo 'Deploying application...'
-                    // Make sure deploy-script.bat exists or update this command
                     bat 'deploy-script.bat'
                 }
             }
