@@ -1,30 +1,57 @@
 pipeline {
     agent any
-    
+
+    environment {
+        GIT_CREDENTIALS_ID = '0c651ffc-10ed-4b2d-a05b-f45c2cd2b267'  // Your credentials ID
+        GIT_REPO_URL = 'https://github.com/AyushBhosale/jenkinsTrial.git'  // Correct repo URL
+        BRANCH_NAME = 'main'  // Set the branch to checkout
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git 'https://github.com/your-repo.git'
+                script {
+                    echo 'Checking out code from GitHub...'
+                    git branch: "${BRANCH_NAME}", credentialsId: "${GIT_CREDENTIALS_ID}", url: "${GIT_REPO_URL}"
+                }
             }
         }
-        
-        stage('Build') {
+
+        stage('Build Application') {
             steps {
-                bat 'mvn clean install'
+                script {
+                    echo 'Building the application using Maven...'
+                    bat 'mvn clean install'
+                }
             }
         }
-        
-        stage('Test') {
+
+        stage('Run Tests') {
             steps {
-                bat 'mvn test'
+                script {
+                    echo 'Running test cases...'
+                    bat 'mvn test'
+                }
             }
         }
-        
-        stage('Deploy') {
+
+        stage('Deploy Application') {
             steps {
-                echo 'Deploying application...'
-                bat 'deploy-script.bat'
+                script {
+                    echo 'Deploying application...'
+                    bat 'deploy-script.bat'
+                }
             }
         }
     }
+
+    post {
+        success {
+            echo 'Pipeline executed successfully! 🎉'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for errors. ❌'
+        }
+    }
 }
+
